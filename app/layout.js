@@ -9,7 +9,7 @@ export const viewport = {
 
 export const metadata = {
   title: 'Refuel Pickup',
-  description: 'Servicio de recarga de combustible',
+  description: 'This is a test description of the app',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
