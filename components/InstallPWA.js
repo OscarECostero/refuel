@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export default function InstallPWA() {
+export default function InstallPWA({ onInstallClick }) {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [debugInfo, setDebugInfo] = useState({
@@ -16,19 +16,17 @@ export default function InstallPWA() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Actualizar información de depuración
       const updateDebugInfo = () => {
         setDebugInfo({
           isStandalone: window.matchMedia('(display-mode: standalone)').matches,
           isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
           isPWACompatible: 'serviceWorker' in navigator,
-          hasServiceWorker: false, // Se actualizará después
+          hasServiceWorker: false,
           beforeInstallPromptFired: !!deferredPrompt,
           currentTimestamp: new Date().toLocaleTimeString(),
         });
       };
 
-      // Verificar service worker
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(registrations => {
           setDebugInfo(prev => ({
@@ -54,40 +52,33 @@ export default function InstallPWA() {
     }
   }, [deferredPrompt]);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(registration => {
-          console.log('SW registered:', registration);
-          setDebugInfo(prev => ({
-            ...prev,
-            hasServiceWorker: true
-          }));
-        })
-        .catch(error => {
-          console.log('SW registration failed:', error);
-          setDebugInfo(prev => ({
-            ...prev,
-            hasServiceWorker: false,
-            lastError: error.message
-          }));
-        });
-    }
-  }, []);
-
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      console.log('No hay prompt de instalación disponible');
+      return;
+    }
 
     try {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
+      await deferredPrompt.prompt();
+      
+      const choiceResult = await deferredPrompt.userChoice;
+      
       setDebugInfo(prev => ({
         ...prev,
-        lastUserChoice: outcome,
+        lastUserChoice: choiceResult.outcome,
       }));
+
       setDeferredPrompt(null);
       setIsInstallable(false);
+
+      if (choiceResult.outcome === 'accepted') {
+        console.log('Usuario aceptó la instalación');
+        setTimeout(() => {
+          window.location.href = 'https://refuelpickup.com/';
+        }, 1000);
+      }
     } catch (err) {
+      console.error('Error durante la instalación:', err);
       setDebugInfo(prev => ({
         ...prev,
         lastError: err.message,
@@ -95,38 +86,36 @@ export default function InstallPWA() {
     }
   };
 
-  return (
-    <div>
-      {/* Panel de depuración */}
-      <div className="fixed top-0 left-0 right-0 bg-black/80 text-white p-4 text-xs z-50">
-        <h3 className="font-bold mb-2">Debug Info:</h3>
-        <ul>
-          <li>🕒 Última actualización: {debugInfo.currentTimestamp}</li>
-          <li>📱 Modo standalone: {debugInfo.isStandalone ? '✅' : '❌'}</li>
-          <li>🍎 Dispositivo iOS: {debugInfo.isIOS ? '✅' : '❌'}</li>
-          <li>🔧 Compatible con PWA: {debugInfo.isPWACompatible ? '✅' : '❌'}</li>
-          <li>👷 Service Worker activo: {debugInfo.hasServiceWorker ? '✅' : '❌'}</li>
-          <li>📥 Evento beforeinstallprompt: {debugInfo.beforeInstallPromptFired ? '✅' : '❌'}</li>
-          <li>💾 DeferredPrompt disponible: {deferredPrompt ? '✅' : '❌'}</li>
-          <li>🎯 Es instalable: {isInstallable ? '✅' : '❌'}</li>
-          {debugInfo.lastUserChoice && (
-            <li>✨ Última elección: {debugInfo.lastUserChoice}</li>
-          )}
-          {debugInfo.lastError && (
-            <li className="text-red-400">❌ Error: {debugInfo.lastError}</li>
-          )}
-        </ul>
-      </div>
+  useEffect(() => {
+    onInstallClick?.({ 
+      handleInstall: handleInstallClick, 
+      isInstallable: !!deferredPrompt 
+    });
+  }, [deferredPrompt, onInstallClick]);
 
-      {/* Botón de instalación */}
-      {isInstallable && (
-        <button
-          onClick={handleInstallClick}
-          className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
-        >
-          Instalar App
-        </button>
-      )}
+  return (
+    <div className="fixed bottom-0 left-0 right-0 bg-black/80 text-white p-4 text-xs">
+      <div className="max-w-2xl mx-auto">
+        <h3 className="font-bold mb-2">Debug Info:</h3>
+        <div className="grid grid-cols-2 gap-2">
+          <ul>
+            <li>🕒 Last update: {debugInfo.currentTimestamp}</li>
+            <li>📱 standalone: {debugInfo.isStandalone ? '✅' : '❌'}</li>
+            <li>🍎 iOS Device: {debugInfo.isIOS ? '✅' : '❌'}</li>
+            <li>🔧 PWA ready: {debugInfo.isPWACompatible ? '✅' : '❌'}</li>
+            <li>👷 Service Worker active: {debugInfo.hasServiceWorker ? '✅' : '❌'}</li>
+            <li>📥 Event beforeinstallprompt: {debugInfo.beforeInstallPromptFired ? '✅' : '❌'}</li>
+            <li>💾 DeferredPrompt ready: {deferredPrompt ? '✅' : '❌'}</li>
+            <li>🎯 can ``: {isInstallable ? '✅' : '❌'}</li>
+            {debugInfo.lastUserChoice && (
+              <li>✨ Last user choice: {debugInfo.lastUserChoice}</li>
+            )}
+            {debugInfo.lastError && (
+              <li className="text-red-400">❌ Error: {debugInfo.lastError}</li>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
