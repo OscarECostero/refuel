@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import InstallPWA from '../components/InstallPWA';
+import { saveQueryParams, buildRedirectUrl } from '../utils/url-utils';
 
 export default function Home() {
   const [installHandler, setInstallHandler] = useState(null);
@@ -15,7 +16,8 @@ export default function Home() {
       setIsStandalone(isInStandaloneMode);
       
       if (isInStandaloneMode) {
-        window.location.href = 'https://refuelpickup.com/';
+        saveQueryParams();
+        window.location.href = buildRedirectUrl('https://refuelpickup.com');
       } else {
         setIsLoading(false);
       }

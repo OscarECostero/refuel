@@ -1,4 +1,5 @@
 import './globals.css';
+import OfflineManager from '../components/OfflineManager';
 
 export const viewport = {
   width: 'device-width',
@@ -32,7 +33,10 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
       </head>
-      <body>{children}</body>
+      <body>
+        <OfflineManager />
+        {children}
+      </body>
     </html>
   )
 }
