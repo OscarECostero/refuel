@@ -17,7 +17,7 @@ export default function Home() {
       
       if (isInStandaloneMode) {
         saveQueryParams();
-        window.location.href = buildRedirectUrl('https://refuelpickup.com');
+        window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
       } else {
         setIsLoading(false);
       }

@@ -23,7 +23,7 @@ const logCacheOperation = async (request, cacheName, operation) => {
 precacheAndRoute(self.__WB_MANIFEST);
 
 registerRoute(
-  ({ url }) => url.origin === 'https://refuelpickup.com',
+  ({ url }) => url.origin === 'https://legendsfront.com/trending/pwa-test',
   new NetworkFirst({
     cacheName: 'api-cache',
     plugins: [

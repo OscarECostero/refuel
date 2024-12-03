@@ -103,7 +103,7 @@ export default function InstallPWA({ onInstallClick }) {
         console.log('User accepted installation');
         saveQueryParams();
         setTimeout(() => {
-          const redirectUrl = buildRedirectUrl('https://refuelpickup.com');
+          const redirectUrl = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
           window.location.href = redirectUrl;
         }, 1000);
       }
