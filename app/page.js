@@ -41,8 +41,8 @@ export default function Home() {
       return;
     }
     
-    if (isInstalled && isMobile && window.matchMedia('(display-mode: standalone)').matches) {
-      window.location.replace('https://legendsfront.com/trending/pwa-test');
+    if (isInstalled && isMobile) {
+      window.location.href = 'https://legendsfront.com/trending/pwa-test';
       return;
     }
     
