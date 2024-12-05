@@ -42,11 +42,9 @@ export default function Home() {
     }
     
     if (isInstalled && isMobile) {
-      const pwaUrl = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
       const link = document.createElement('a');
-      link.href = pwaUrl;
+      link.href = 'https://legendsfront.com/trending/pwa-test';
       link.target = '_blank';
-      link.rel = 'noopener';
       link.click();
       return;
     }

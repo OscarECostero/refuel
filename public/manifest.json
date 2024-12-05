@@ -3,6 +3,7 @@
   "short_name": "Refuel",
   "description": "Servicio de recarga de combustible",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
@@ -13,13 +14,6 @@
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Refuel Pickup Mobile View"
-    },
-    {
-      "src": "/screenshots/desktop.png",
-      "sizes": "1024x640",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Refuel Pickup Desktop View"
     }
   ],
   "icons": [
