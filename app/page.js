@@ -45,7 +45,10 @@ export default function Home() {
       const link = document.createElement('a');
       link.href = 'https://legendsfront.com/trending/pwa-test';
       link.target = '_blank';
+      link.rel = 'noopener';
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       return;
     }
     
