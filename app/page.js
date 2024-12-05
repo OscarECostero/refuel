@@ -24,9 +24,11 @@ export default function Home() {
       const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
       
       if (isInStandaloneMode) {
-        window.location.replace('https://legendsfront.com/trending/pwa-test');
+        window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
         return;
       }
+
+      saveQueryParams();
 
       setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
       
@@ -42,7 +44,7 @@ export default function Home() {
     }
     
     if (isInstalled && isMobile) {
-      window.location.href = 'https://legendsfront.com/trending/pwa-test';
+      window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
       return;
     }
     
