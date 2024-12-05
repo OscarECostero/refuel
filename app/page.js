@@ -14,15 +14,16 @@ export default function Home() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Detectar si es mobile
+      const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
       setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
       
-      // Verificar si está instalada
-      const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+      if (isInStandaloneMode) {
+        window.location.href = 'https://legendsfront.com/trending/pwa-test';
+        return;
+      }
+
       const wasInstalled = localStorage.getItem('pwa_installed') === 'true';
-      
-      setIsStandalone(isInStandaloneMode);
-      setIsInstalled(isInStandaloneMode || wasInstalled);
+      setIsInstalled(wasInstalled);
       setIsLoading(false);
     }
   }, []);
@@ -34,21 +35,19 @@ export default function Home() {
   }, []);
 
   const handleButtonClick = () => {
-    if (isInstalled) {
-      if (isMobile) {
-        // En mobile, intentar abrir la PWA instalada
-        window.location.href = 'pwa://legendsfront.com/trending/pwa-test';
-        // Fallback si no se puede abrir la PWA
-        setTimeout(() => {
-          window.location.href = 'https://legendsfront.com/trending/pwa-test';
-        }, 100);
-      }
-      // En desktop no hacer nada si ya está instalada
-      return;
+    if (isInstalled && isMobile) {
+      const pwaUrl = 'legendsfront://trending/pwa-test';
+      window.location.href = pwaUrl;
+      
+      setTimeout(() => {
+        const manifestUrl = window.location.origin + '/manifest.json';
+        const link = document.createElement('a');
+        link.href = manifestUrl;
+        link.click();
+      }, 100);
+    } else {
+      installHandler?.();
     }
-    
-    // Si no está instalada, mostrar prompt de instalación
-    installHandler?.();
   };
 
   if (isLoading) {
