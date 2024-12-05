@@ -106,7 +106,7 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
         localStorage.setItem('pwa_installed', 'true');
         onInstallSuccess?.();
         
-        window.location.replace('https://legendsfront.com/trending/pwa-test');
+        window.location.reload();
       } else {
         window.location.reload();
       }
