@@ -103,11 +103,17 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
       
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted installation');
+        localStorage.setItem('pwa_installed', 'true');
         onInstallSuccess?.();
-        setDeferredPrompt(null);
+        
+        window.location.replace('https://legendsfront.com/trending/pwa-test');
+      } else {
+        window.location.reload();
       }
     } catch (err) {
       console.error('Installation error:', err);
+      localStorage.removeItem('pwa_installed');
+      window.location.reload();
     }
   }, [deferredPrompt, isIOS, handleIOSInstall, onInstallSuccess]);
 

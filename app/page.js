@@ -8,71 +8,58 @@ export default function Home() {
   const [installHandler, setInstallHandler] = useState(null);
   const [canInstall, setCanInstall] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isStandalone, setIsStandalone] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isInstallingPWA, setIsInstallingPWA] = useState(false);
 
   const handleInstallClick = useCallback(({ handleInstall, isInstallable }) => {
-    if (!handleInstall) return;
-    
-    setInstallHandler(() => {
-      return () => {
-        handleInstall();
-      };
-    });
-    setCanInstall(isInstallable);
+    if (handleInstall) {
+      setInstallHandler(() => handleInstall);
+      setCanInstall(isInstallable);
+    }
   }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      setIsMobile(isMobileDevice);
-      
       const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
       
       if (isInStandaloneMode) {
-        setIsStandalone(true);
-        window.location.href = 'https://legendsfront.com/trending/pwa-test';
+        window.location.replace('https://legendsfront.com/trending/pwa-test');
         return;
       }
 
-      const checkInstallation = async () => {
-        try {
-          const registration = await navigator.serviceWorker.getRegistration();
-          const isAppInstalled = registration && localStorage.getItem('pwa_installed') === 'true';
-          setIsInstalled(isAppInstalled);
-        } catch (err) {
-          console.error('Error checking installation:', err);
-          setIsInstalled(false);
-        }
-        setIsLoading(false);
-      };
-
-      checkInstallation();
+      setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+      
+      const wasInstalled = localStorage.getItem('pwa_installed') === 'true';
+      setIsInstalled(wasInstalled);
+      setIsLoading(false);
     }
   }, []);
 
   const handleButtonClick = () => {
-    if (isInstalled) {
-      if (isMobile) {
-        try {
-          window.location.replace('https://legendsfront.com/trending/pwa-test');
-        } catch (err) {
-          console.error('Error opening PWA:', err);
-        }
-      }
+    if (isInstalled && !isMobile) {
       return;
     }
     
-    installHandler?.();
+    if (isInstalled && isMobile) {
+      window.location.replace('https://legendsfront.com/trending/pwa-test');
+      return;
+    }
+    
+    if (installHandler) {
+      setIsInstallingPWA(true);
+      installHandler();
+    }
   };
 
-  if (isLoading) {
+  if (isLoading || isInstallingPWA) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="fixed inset-0 bg-white flex items-center justify-center z-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <p className="mt-4 text-gray-600">
+            {isInstallingPWA ? 'Installing app...' : 'Loading...'}
+          </p>
         </div>
       </div>
     );
@@ -114,16 +101,12 @@ export default function Home() {
           <button
             onClick={handleButtonClick}
             className={`w-full py-4 px-6 rounded-lg font-semibold text-lg shadow-lg transition-colors mt-4 ${
-              canInstall || isInstalled
-                ? 'bg-green-600 hover:bg-green-700 text-white cursor-pointer'
-                : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+              isInstalled || canInstall 
+                ? 'bg-green-600 hover:bg-green-700 text-white'
+                : 'bg-green-600 hover:bg-green-700 text-white'
             }`}
-            disabled={!canInstall && !isInstalled}
           >
-            {isInstalled 
-              ? (isMobile ? 'Play' : 'App Installed') 
-              : 'Install App'
-            }
+            {isInstalled ? 'App Installed' : 'Install App'}
           </button>
         </div>
       </div>
