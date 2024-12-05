@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { saveQueryParams, buildRedirectUrl } from '../utils/url-utils';
 
-export default function InstallPWA({ onInstallClick }) {
+export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -87,6 +87,7 @@ export default function InstallPWA({ onInstallClick }) {
   const handleInstallClick = useCallback(async () => {
     if (isIOS) {
       handleIOSInstall();
+      onInstallSuccess?.();
       return;
     }
 
@@ -102,15 +103,12 @@ export default function InstallPWA({ onInstallClick }) {
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted installation');
         saveQueryParams();
-        setTimeout(() => {
-          const redirectUrl = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
-          window.location.href = redirectUrl;
-        }, 1000);
+        onInstallSuccess?.();
       }
     } catch (err) {
       console.error('Installation error:', err);
     }
-  }, [deferredPrompt, isIOS, handleIOSInstall]);
+  }, [deferredPrompt, isIOS, handleIOSInstall, onInstallSuccess]);
 
   useEffect(() => {
     onInstallClick?.({

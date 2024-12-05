@@ -9,18 +9,21 @@ export default function Home() {
   const [canInstall, setCanInstall] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
-      setIsStandalone(isInStandaloneMode);
+      // Detectar si es mobile
+      setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
       
-      if (isInStandaloneMode) {
-        saveQueryParams();
-        window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
-      } else {
-        setIsLoading(false);
-      }
+      // Verificar si está instalada
+      const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+      const wasInstalled = localStorage.getItem('pwa_installed') === 'true';
+      
+      setIsStandalone(isInStandaloneMode);
+      setIsInstalled(isInStandaloneMode || wasInstalled);
+      setIsLoading(false);
     }
   }, []);
 
@@ -30,12 +33,30 @@ export default function Home() {
     setCanInstall(isInstallable);
   }, []);
 
-  if (isLoading || isStandalone) {
+  const handleButtonClick = () => {
+    if (isInstalled) {
+      if (isMobile) {
+        // En mobile, intentar abrir la PWA instalada
+        window.location.href = 'pwa://legendsfront.com/trending/pwa-test';
+        // Fallback si no se puede abrir la PWA
+        setTimeout(() => {
+          window.location.href = 'https://legendsfront.com/trending/pwa-test';
+        }, 100);
+      }
+      // En desktop no hacer nada si ya está instalada
+      return;
+    }
+    
+    // Si no está instalada, mostrar prompt de instalación
+    installHandler?.();
+  };
+
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Cargando...</p>
+          <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -75,22 +96,28 @@ export default function Home() {
           </div>
         </div>
           <button
-            onClick={() => {
-              console.log('Clicking install button', { installHandler });
-              installHandler?.();
-            }}
+            onClick={handleButtonClick}
             className={`w-full py-4 px-6 rounded-lg font-semibold text-lg shadow-lg transition-colors mt-4 ${
-              canInstall 
+              canInstall || isInstalled
                 ? 'bg-green-600 hover:bg-green-700 text-white cursor-pointer'
                 : 'bg-gray-400 text-gray-200 cursor-not-allowed'
             }`}
-            disabled={!canInstall}
+            disabled={!canInstall && !isInstalled}
           >
-            Install App
+            {isInstalled 
+              ? (isMobile ? 'Play' : 'App Installed') 
+              : 'Install App'
+            }
           </button>
         </div>
       </div>
-      <InstallPWA onInstallClick={handleInstallClick} />
+      <InstallPWA 
+        onInstallClick={handleInstallClick}
+        onInstallSuccess={() => {
+          setIsInstalled(true);
+          localStorage.setItem('pwa_installed', 'true');
+        }}
+      />
     </div>
   );
 } 
