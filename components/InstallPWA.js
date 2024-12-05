@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { saveQueryParams, buildRedirectUrl } from '../utils/url-utils';
 
 export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
@@ -17,6 +17,8 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
     beforeInstallPromptFired: false,
     currentTimestamp: '',
   });
+
+  const previousInstallData = useRef(null);
 
   const handleBeforeInstallPrompt = useCallback((e) => {
     e.preventDefault();
@@ -87,7 +89,6 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
   const handleInstallClick = useCallback(async () => {
     if (isIOS) {
       handleIOSInstall();
-      onInstallSuccess?.();
       return;
     }
 
@@ -102,8 +103,8 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
       
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted installation');
-        saveQueryParams();
         onInstallSuccess?.();
+        setDeferredPrompt(null);
       }
     } catch (err) {
       console.error('Installation error:', err);
@@ -111,11 +112,19 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
   }, [deferredPrompt, isIOS, handleIOSInstall, onInstallSuccess]);
 
   useEffect(() => {
-    onInstallClick?.({
+    const installData = {
       handleInstall: handleInstallClick,
-      isInstallable: isInstallable
-    });
-  }, [handleInstallClick, isInstallable, onInstallClick]);
+      isInstallable
+    };
+    
+    if (onInstallClick && (
+      !previousInstallData.current ||
+      previousInstallData.current.isInstallable !== isInstallable
+    )) {
+      previousInstallData.current = installData;
+      onInstallClick(installData);
+    }
+  }, [isInstallable]);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black/80 text-white p-4 text-xs">

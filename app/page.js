@@ -12,42 +12,59 @@ export default function Home() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  const handleInstallClick = useCallback(({ handleInstall, isInstallable }) => {
+    if (!handleInstall) return;
+    
+    setInstallHandler(() => {
+      return () => {
+        handleInstall();
+      };
+    });
+    setCanInstall(isInstallable);
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      setIsMobile(isMobileDevice);
+      
       const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
-      setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
       
       if (isInStandaloneMode) {
+        setIsStandalone(true);
         window.location.href = 'https://legendsfront.com/trending/pwa-test';
         return;
       }
 
-      const wasInstalled = localStorage.getItem('pwa_installed') === 'true';
-      setIsInstalled(wasInstalled);
-      setIsLoading(false);
-    }
-  }, []);
+      const checkInstallation = async () => {
+        try {
+          const registration = await navigator.serviceWorker.getRegistration();
+          const isAppInstalled = registration && localStorage.getItem('pwa_installed') === 'true';
+          setIsInstalled(isAppInstalled);
+        } catch (err) {
+          console.error('Error checking installation:', err);
+          setIsInstalled(false);
+        }
+        setIsLoading(false);
+      };
 
-  const handleInstallClick = useCallback(({ handleInstall, isInstallable }) => {
-    console.log('Setting install handler:', { handleInstall, isInstallable });
-    setInstallHandler(() => handleInstall);
-    setCanInstall(isInstallable);
+      checkInstallation();
+    }
   }, []);
 
   const handleButtonClick = () => {
-    if (isInstalled && isMobile) {
-      const pwaUrl = 'legendsfront://trending/pwa-test';
-      window.location.href = pwaUrl;
-      
-      setTimeout(() => {
-        const manifestUrl = window.location.origin + '/manifest.json';
-        const link = document.createElement('a');
-        link.href = manifestUrl;
-        link.click();
-      }, 100);
-    } else {
-      installHandler?.();
+    if (isInstalled) {
+      if (isMobile) {
+        try {
+          window.location.replace('https://legendsfront.com/trending/pwa-test');
+        } catch (err) {
+          console.error('Error opening PWA:', err);
+        }
+      }
+      return;
     }
+    
+    installHandler?.();
   };
 
   if (isLoading) {

@@ -1,18 +1,11 @@
 {
   "name": "Refuel Pickup",
   "short_name": "Refuel",
-  "description": "this is a test description",
-  "start_url": "https://legendsfront.com/trending/pwa-test",
-  "scope": "/",
+  "description": "Servicio de recarga de combustible",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
-  "protocol_handlers": [
-    {
-      "protocol": "legendsfront",
-      "url": "/trending/pwa-test?url=%s"
-    }
-  ],
   "screenshots": [
     {
       "src": "/screenshots/mobile.png",
