@@ -87,33 +87,40 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
   }, []);
 
   const handleInstallClick = useCallback(async () => {
+    saveQueryParams();
+
     if (isIOS) {
       handleIOSInstall();
       return;
     }
 
-    if (!deferredPrompt) {
-      console.log('No installation prompt available');
-      return;
-    }
-
     try {
-      await deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted installation');
-        localStorage.setItem('pwa_installed', 'true');
-        onInstallSuccess?.();
+      if (deferredPrompt) {
+        await deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
         
-        window.location.reload();
-      } else {
-        window.location.reload();
+        if (outcome === 'accepted') {
+          console.log('User accepted installation');
+          localStorage.setItem('pwa_installed', 'true');
+          
+          // Registrar el protocolo web+pwa
+          if ('registerProtocolHandler' in navigator) {
+            try {
+              navigator.registerProtocolHandler(
+                'web+pwa',
+                `${window.location.origin}/%s`,
+                'PWA Handler'
+              );
+            } catch (err) {
+              console.error('Error registering protocol handler:', err);
+            }
+          }
+          
+          onInstallSuccess?.();
+        }
       }
     } catch (err) {
       console.error('Installation error:', err);
-      localStorage.removeItem('pwa_installed');
-      window.location.reload();
     }
   }, [deferredPrompt, isIOS, handleIOSInstall, onInstallSuccess]);
 

@@ -126,6 +126,37 @@ self.addEventListener('fetch', (event) => {
     mode: event.request.mode,
     timestamp: new Date().toLocaleTimeString()
   });
+
+  const url = new URL(event.request.url);
+  
+  if (url.protocol === 'web+pwa:') {
+    event.respondWith(
+      (async () => {
+        const redirectUrl = new URLSearchParams(url.search).get('url');
+        if (redirectUrl) {
+          // Buscar una ventana existente de la PWA
+          const clients = await self.clients.matchAll({
+            type: 'window',
+            includeUncontrolled: true
+          });
+          
+          for (const client of clients) {
+            if (client.url.includes('legendsfront.com') && 'focus' in client) {
+              await client.focus();
+              return new Response('', {
+                status: 302,
+                headers: { Location: redirectUrl }
+              });
+            }
+          }
+          
+          // Si no hay ventana existente, abrir una nueva
+          await self.clients.openWindow(redirectUrl);
+        }
+        return new Response('Success');
+      })()
+    );
+  }
 });
 
 self.addEventListener('error', (event) => {
