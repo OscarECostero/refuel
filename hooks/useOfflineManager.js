@@ -10,7 +10,7 @@ export function useOfflineManager() {
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      const workbox = new Workbox('/service-worker.js');
+      const workbox = new Workbox('/sw.js');
 
       workbox.addEventListener('waiting', () => {
         setIsUpdateAvailable(true);
