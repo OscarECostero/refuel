@@ -105,8 +105,24 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
           await new Promise(resolve => setTimeout(resolve, 6000));
           
           localStorage.setItem('pwa_installed', 'true');
+          const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
           
-          onInstallClick?.({ handleInstall: null, isInstallable: false });
+          if (!isMobileDevice) {
+            window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
+            return;
+          }
+          
+          if ('registerProtocolHandler' in navigator) {
+            try {
+              navigator.registerProtocolHandler(
+                'web+pwa',
+                `${window.location.origin}/%s`,
+                'PWA Handler'
+              );
+            } catch (err) {
+              console.error('Error registering protocol handler:', err);
+            }
+          }
           
           onInstallSuccess?.();
         } else {
@@ -143,7 +159,7 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
             <li>🕒 Last update: {debugInfo.currentTimestamp}</li>
             <li>📱 standalone: {debugInfo.isStandalone ? '✅' : '❌'}</li>
             <li>🍎 iOS Device: {debugInfo.isIOS ? '✅' : '❌'}</li>
-            <li>��� iOS Safari: {debugInfo.isIOSSafari ? '✅' : '❌'}</li>
+            <li>🔧 iOS Safari: {debugInfo.isIOSSafari ? '✅' : '❌'}</li>
             <li>🌐 iOS Chrome: {debugInfo.isIOSChrome ? '✅' : '❌'}</li>
             <li>🔧 PWA ready: {debugInfo.isPWACompatible ? '✅' : '❌'}</li>
             <li>👷 Service Worker active: {debugInfo.hasServiceWorker ? '✅' : '❌'}</li>
