@@ -2,8 +2,13 @@ import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
-// Precache y rutas
-precacheAndRoute(self.__WB_MANIFEST)
+// Filtrar el manifest que causa el error
+const manifestEntries = self.__WB_MANIFEST.filter(entry => 
+  !entry.url.includes('app-build-manifest.json')
+);
+
+// Precache y rutas con el manifest filtrado
+precacheAndRoute(manifestEntries)
 
 // Ruta para navegación
 registerRoute(
