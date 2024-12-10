@@ -44,15 +44,17 @@ export default function Home() {
     }
     
     if (isInstalled && isMobile) {
-      try {
-        window.location.href = `web+pwa://open?url=${encodeURIComponent(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'))}`;
+      window.location.href = '/';
+
+      // try {
+      //   window.location.href = `web+pwa://open?url=${encodeURIComponent(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'))}`;
         
-        setTimeout(() => {
-          window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
-        }, 500);
-      } catch (err) {
-        window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
-      }
+      //   setTimeout(() => {
+      //     window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
+      //   }, 500);
+      // } catch (err) {
+      //   window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
+      // }
       return;
     }
     
