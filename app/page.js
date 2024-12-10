@@ -11,6 +11,7 @@ export default function Home() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isInstallingPWA, setIsInstallingPWA] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handleInstallClick = useCallback(({ handleInstall, isInstallable }) => {
     if (handleInstall) {
@@ -29,7 +30,6 @@ export default function Home() {
       const launchSource = urlParams.get('source');
       const displayMode = urlParams.get('mode');
       
-      // Si estamos en modo standalone o es un lanzamiento desde la PWA
       if (isInStandaloneMode || (launchSource === 'pwa-launch' && displayMode === 'standalone')) {
         window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
         return;
@@ -44,20 +44,18 @@ export default function Home() {
   }, []);
 
   const handleButtonClick = () => {
-    if (isInstalled) {
+    if (isInstalled && isMobile) {
+      setIsRedirecting(true);
       try {
-        // Intentar abrir usando el start_url del manifest
         const pwaUrl = new URL(window.location.origin);
         pwaUrl.searchParams.set('mode', 'standalone');
         pwaUrl.searchParams.set('source', 'pwa-launch');
         
-        // En Chrome/Android
         if ('launchQueue' in window) {
           window.location.href = pwaUrl.toString();
           return;
         }
 
-        // Fallback para otros navegadores
         const a = document.createElement('a');
         a.href = pwaUrl.toString();
         a.target = '_blank';
@@ -67,7 +65,6 @@ export default function Home() {
         document.body.removeChild(a);
       } catch (err) {
         console.error('Error launching PWA:', err);
-        // Fallback simple
         window.location.href = window.location.origin;
       }
       return;
@@ -79,14 +76,23 @@ export default function Home() {
     }
   };
 
-  if (isLoading || isInstallingPWA) {
+  if (isRedirecting) {
     return (
       <div className="fixed inset-0 bg-white flex items-center justify-center z-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">
-            {isInstallingPWA ? 'Installing app...' : 'Loading...'}
-          </p>
+          <p className="mt-4 text-gray-600">Abriendo app...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-white flex items-center justify-center z-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -127,13 +133,21 @@ export default function Home() {
         </div>
           <button
             onClick={handleButtonClick}
-            className={`w-full py-4 px-6 rounded-lg font-semibold text-lg shadow-lg transition-colors mt-4 ${
+            disabled={isInstallingPWA}
+            className={`w-full py-4 px-6 rounded-lg font-semibold text-lg shadow-lg transition-colors mt-4 relative ${
               isInstalled || canInstall 
                 ? 'bg-green-600 hover:bg-green-700 text-white'
                 : 'bg-green-600 hover:bg-green-700 text-white'
             }`}
           >
-            {isInstalled ? 'App Installed' : 'Install App'}
+            {isInstallingPWA ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Installing...
+              </div>
+            ) : (
+              isInstalled ? 'App Installed' : 'Install App'
+            )}
           </button>
         </div>
       </div>
