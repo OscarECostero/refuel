@@ -118,6 +118,7 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
             }
           }
           
+          onInstallClick?.({ handleInstall: null, isInstallable: false });
           onInstallSuccess?.();
         } else {
           console.log('User rejected installation');

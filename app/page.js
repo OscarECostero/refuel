@@ -21,6 +21,9 @@ export default function Home() {
       setIsInstallingPWA(false);
       setInstallHandler(null);
       setCanInstall(false);
+      if (localStorage.getItem('pwa_installed') === 'true') {
+        setIsInstalled(true);
+      }
     }
   }, []);
 
