@@ -5,9 +5,8 @@
   "start_url": "/?source=pwa-launch&mode=standalone",
   "scope": "/",
   "display": "standalone",
-  "launch_handler": {
-    "client_mode": ["navigate-existing", "auto"]
-  },
+  "prefer_related_applications": false,
+  "display_override": ["window-controls-overlay"],
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "screenshots": [

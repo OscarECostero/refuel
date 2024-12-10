@@ -106,6 +106,13 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
           
           localStorage.setItem('pwa_installed', 'true');
           
+          const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+          
+          if (!isMobileDevice) {
+            window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
+            return;
+          }
+          
           if ('registerProtocolHandler' in navigator) {
             try {
               navigator.registerProtocolHandler(
@@ -118,10 +125,8 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
             }
           }
           
-          onInstallClick?.({ handleInstall: null, isInstallable: false });
           onInstallSuccess?.();
         } else {
-          console.log('User rejected installation');
           onInstallClick?.({ handleInstall: null, isInstallable: false });
         }
       }
