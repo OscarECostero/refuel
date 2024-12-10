@@ -9,13 +9,13 @@ export const viewport = {
 }
 
 export const metadata = {
-  title: 'Refuel Pickup',
-  description: 'This is a test description of the app',
+  title: 'Fortune Flight',
+  description: 'This Fortune Flight',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Refuel Pickup',
+    title: 'Fortune Flight',
   },
   formatDetection: {
     telephone: false,
@@ -25,7 +25,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
+    <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#000000" />

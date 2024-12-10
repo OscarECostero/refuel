@@ -2,15 +2,12 @@ import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
-// Filtrar el manifest que causa el error
 const manifestEntries = self.__WB_MANIFEST.filter(entry => 
   !entry.url.includes('app-build-manifest.json')
 );
 
-// Precache y rutas con el manifest filtrado
 precacheAndRoute(manifestEntries)
 
-// Ruta para navegación
 registerRoute(
   ({ request }) => request.mode === 'navigate',
   new NetworkFirst({
@@ -18,7 +15,6 @@ registerRoute(
   })
 )
 
-// Ruta para imágenes
 registerRoute(
   ({ request }) => request.destination === 'image',
   new CacheFirst({
@@ -26,7 +22,6 @@ registerRoute(
   })
 )
 
-// Ruta para recursos estáticos
 registerRoute(
   ({ request }) => 
     request.destination === 'style' ||
@@ -37,11 +32,10 @@ registerRoute(
   })
 )
 
-// Eventos básicos
 self.addEventListener('install', () => {
-  console.log('Service Worker instalado')
+  console.log('Service Worker installed')
 })
 
 self.addEventListener('activate', () => {
-  console.log('Service Worker activado')
+  console.log('Service Worker activated')
 })

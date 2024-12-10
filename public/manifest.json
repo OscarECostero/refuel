@@ -1,7 +1,7 @@
 {
-  "name": "Refuel Pickup",
-  "short_name": "Refuel",
-  "description": "Servicio de recarga de combustible",
+  "name": "Fortune Flight",
+  "short_name": "Fortune Flight",
+  "description": "Fortune Flight",
   "start_url": "/?source=pwa-launch&mode=standalone",
   "scope": "/",
   "display": "standalone",

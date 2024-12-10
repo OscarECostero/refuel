@@ -51,6 +51,10 @@ export default function Home() {
   }, []);
 
   const handleButtonClick = () => {
+    if (isInstalled && !isMobile) {
+      return
+    }
+
     if (isInstalled && isMobile) {
       setIsRedirecting(true);
       try {
@@ -103,8 +107,8 @@ export default function Home() {
             <img src="/icons/144.png" alt="App Icon" className="w-16 h-16 rounded-2xl" />
           </picture>
           <div className="ml-4">
-            <h1 className="text-xl font-bold text-black">Refuel pickup</h1>
-            <span className="block text-green-700 font-bold">Refuel pickup</span>
+            <h1 className="text-xl font-bold text-black">Fortune Flight</h1>
+            <span className="block text-green-700 font-bold">Fortune Flight</span>
             <span className="block text-gray-700">Without ads · In-app purchases</span>
           </div>
         </div>
@@ -142,7 +146,7 @@ export default function Home() {
                 Installing...
               </div>
             ) : (
-              isInstalled ? 'App Installed' : 'Install App'
+              isInstalled ? 'Play' : 'Install App'
             )}
           </button>
         </div>
