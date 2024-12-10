@@ -17,6 +17,10 @@ export default function Home() {
     if (handleInstall) {
       setInstallHandler(() => handleInstall);
       setCanInstall(isInstallable);
+    } else {
+      setIsInstallingPWA(false);
+      setInstallHandler(null);
+      setCanInstall(false);
     }
   }, []);
 

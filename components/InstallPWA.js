@@ -101,9 +101,11 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
         
         if (outcome === 'accepted') {
           console.log('User accepted installation');
+          
+          await new Promise(resolve => setTimeout(resolve, 5000));
+          
           localStorage.setItem('pwa_installed', 'true');
           
-          // Registrar el protocolo web+pwa
           if ('registerProtocolHandler' in navigator) {
             try {
               navigator.registerProtocolHandler(
@@ -117,12 +119,16 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
           }
           
           onInstallSuccess?.();
+        } else {
+          console.log('User rejected installation');
+          onInstallClick?.({ handleInstall: null, isInstallable: false });
         }
       }
     } catch (err) {
       console.error('Installation error:', err);
+      onInstallClick?.({ handleInstall: null, isInstallable: false });
     }
-  }, [deferredPrompt, isIOS, handleIOSInstall, onInstallSuccess]);
+  }, [deferredPrompt, isIOS, handleIOSInstall, onInstallSuccess, onInstallClick]);
 
   useEffect(() => {
     const installData = {
