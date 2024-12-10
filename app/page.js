@@ -21,21 +21,18 @@ export default function Home() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
-      const urlParams = new URLSearchParams(window.location.search);
-      const shouldOpenInPwa = urlParams.get('openInPwa');
+      const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches 
+        || window.navigator.standalone 
+        || document.referrer.includes('android-app://');
       
-      if (isInStandaloneMode) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const launchSource = urlParams.get('source');
+      const displayMode = urlParams.get('mode');
+      
+      // Si estamos en modo standalone o es un lanzamiento desde la PWA
+      if (isInStandaloneMode || (launchSource === 'pwa-launch' && displayMode === 'standalone')) {
         window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
         return;
-      }
-
-      if (shouldOpenInPwa) {
-        const manifestUrl = `${window.location.origin}/manifest.json`;
-        const link = document.createElement('link');
-        link.rel = 'manifest';
-        link.href = manifestUrl;
-        document.head.appendChild(link);
       }
 
       saveQueryParams();
@@ -47,19 +44,31 @@ export default function Home() {
   }, []);
 
   const handleButtonClick = () => {
-    if (isInstalled && !isMobile) {
-      return;
-    }
-    
-    if (isInstalled && isMobile) {
+    if (isInstalled) {
       try {
-        window.location.href = `web+pwa://open`;
+        // Intentar abrir usando el start_url del manifest
+        const pwaUrl = new URL(window.location.origin);
+        pwaUrl.searchParams.set('mode', 'standalone');
+        pwaUrl.searchParams.set('source', 'pwa-launch');
         
-        setTimeout(() => {
-          window.location.href = `${window.location.origin}/?openInPwa=true`;
-        }, 100);
+        // En Chrome/Android
+        if ('launchQueue' in window) {
+          window.location.href = pwaUrl.toString();
+          return;
+        }
+
+        // Fallback para otros navegadores
+        const a = document.createElement('a');
+        a.href = pwaUrl.toString();
+        a.target = '_blank';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       } catch (err) {
-        window.location.href = `${window.location.origin}/?openInPwa=true`;
+        console.error('Error launching PWA:', err);
+        // Fallback simple
+        window.location.href = window.location.origin;
       }
       return;
     }
