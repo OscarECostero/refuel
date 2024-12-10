@@ -22,16 +22,24 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+      const urlParams = new URLSearchParams(window.location.search);
+      const shouldOpenInPwa = urlParams.get('openInPwa');
       
       if (isInStandaloneMode) {
         window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
         return;
       }
 
-      saveQueryParams();
+      if (shouldOpenInPwa) {
+        const manifestUrl = `${window.location.origin}/manifest.json`;
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestUrl;
+        document.head.appendChild(link);
+      }
 
+      saveQueryParams();
       setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
-      
       const wasInstalled = localStorage.getItem('pwa_installed') === 'true';
       setIsInstalled(wasInstalled);
       setIsLoading(false);
@@ -44,17 +52,15 @@ export default function Home() {
     }
     
     if (isInstalled && isMobile) {
-      window.location.href = '/';
-
-      // try {
-      //   window.location.href = `web+pwa://open?url=${encodeURIComponent(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'))}`;
+      try {
+        window.location.href = `web+pwa://open`;
         
-      //   setTimeout(() => {
-      //     window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
-      //   }, 500);
-      // } catch (err) {
-      //   window.location.href = buildRedirectUrl('https://legendsfront.com/trending/pwa-test');
-      // }
+        setTimeout(() => {
+          window.location.href = `${window.location.origin}/?openInPwa=true`;
+        }, 100);
+      } catch (err) {
+        window.location.href = `${window.location.origin}/?openInPwa=true`;
+      }
       return;
     }
     
