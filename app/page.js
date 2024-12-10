@@ -37,7 +37,13 @@ export default function Home() {
       const launchSource = urlParams.get('source');
       const displayMode = urlParams.get('mode');
       
-      if (isInStandaloneMode || (launchSource === 'pwa-launch' && displayMode === 'standalone')) {
+      if ((isInStandaloneMode && isMobile) || 
+          (launchSource === 'pwa-launch' && displayMode === 'standalone' && isMobile)) {
+        window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
+        return;
+      }
+
+      if (isInStandaloneMode && !isMobile) {
         window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
         return;
       }
@@ -48,7 +54,7 @@ export default function Home() {
       setIsInstalled(wasInstalled);
       setIsLoading(false);
     }
-  }, []);
+  }, [isMobile]);
 
   const handleButtonClick = () => {
     if (isInstalled && !isMobile) {
