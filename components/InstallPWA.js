@@ -105,7 +105,6 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
           await new Promise(resolve => setTimeout(resolve, 5000));
           
           localStorage.setItem('pwa_installed', 'true');
-          
           const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
           
           if (!isMobileDevice) {
