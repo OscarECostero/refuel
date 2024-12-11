@@ -106,7 +106,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto py-6 px-4">
+      <div className="max-w-[1320px] mx-auto py-4 px-2">
         <div className="flex items-start mt-8">
           <picture>
             <source srcSet="/icons/144.png" type="image/png" />
@@ -124,18 +124,18 @@ export default function Home() {
         </div>
 
         <div className="flex items-center mt-8 mb-6 space-x-12">
-          <div className="flex flex-col">
-            <span className="font-bold text-black">4.9★</span>
+          <div className="flex flex-col items-center">
+            <span className="text-black">4.9★</span>
             <span className="text-xs text-gray-600">7k reviews</span>
           </div>
           <div className="h-8 w-px bg-gray-300"></div>
-          <div className="flex flex-col">
-            <span className="font-bold text-black">1000k+</span>
-            <span className="text-xs text-gray-600">Dowloads</span>
+          <div className="flex flex-col items-center">
+            <span className="text-black">100k+</span>
+            <span className="text-xs text-gray-600">Downloads</span>
           </div>
           <div className="h-8 w-px bg-gray-300"></div>
-          <div className="flex flex-col">
-            <span className="font-bold text-black">18+</span>
+          <div className="flex flex-col items-center">
+            <span className="text-black">18+</span>
             <span className="text-xs text-gray-600">Rated for 18+</span>
           </div>
         </div>
@@ -154,6 +154,20 @@ export default function Home() {
             isInstalled ? 'Play' : 'Install'
           )}
         </button>
+
+        <div className="flex justify-center mt-2">
+          <a href="#" className="flex items-center gap-2 text-[#01875f] text-sm font-medium">
+            <span className="text-lg">🔖</span>
+            Add to wishlist
+          </a>
+        </div>
+        
+        <div className="flex items-center gap-2 mt-4">
+          <span className="text-lg">💻</span>
+          <p className="text-sm text-gray-600">
+            This app is available for all your devices.
+          </p>
+        </div>
 
         <div className="mt-16 overflow-x-auto">
           <div className="flex space-x-4">
@@ -222,7 +236,7 @@ export default function Home() {
         </div>
 
         <div className="mt-6 border-t border-gray-200 pt-4">
-          <h2 className="text-lg font-bold mb-4 flex items-center justify-between text-gray-900">
+          <h2 className="text-lg font-bold mb-12 flex items-center justify-between text-gray-900">
             Ratings and reviews
             {/* <div className="flex items-center space-x-2">
               <button className="p-2 hover:bg-gray-100 rounded-full">
@@ -279,37 +293,41 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-8">
             <div className="border-t border-gray-200 py-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                <div>
-                  <h3 className="font-medium">Rahim Miah</h3>
-                  <div className="flex text-yellow-400">★★★★★</div>
-                  <p className="text-xs text-gray-600">October 23, 2024</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                  <h3 className="font-medium text-gray-900 ml-4">Rahim Miah</h3>
                 </div>
+                <button className="p-2 hover:bg-gray-100 rounded-full text-3xl text-gray-900">⋮</button>
+              </div>
+              <div className="mt-1 flex items-center">
+                <div className="flex text-yellow-400">★★★★★</div>
+                <p className="text-xs text-gray-600 ml-2">October 23, 2024</p>
               </div>
               <p className="mt-2 text-gray-700">
                 I get a great bonus in my balance and play this game daily. Yesterday I won ₹7,000 here and today I won ₹21,000
               </p>
               <p className="text-sm text-gray-600 mt-2">155 people found this review helpful</p>
               <div className="mt-2 flex items-center gap-4">
-              <span className="text-sm text-gray-600">Did you find this helpful?</span>
-
+                <span className="text-sm text-gray-600">Did you find this helpful?</span>
                 <button className="px-4 py-1 text-gray-600 text-sm border border-gray-300 rounded-full">Yes</button>
                 <button className="px-4 py-1 text-gray-600 text-sm border border-gray-300 rounded-full">No</button>
               </div>
             </div>
 
             <div className="border-t border-gray-200 py-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                <div>
-                  <h3 className="font-medium">Abdul Kalam</h3>
-                  <div className="flex text-yellow-400">★★★★★</div>
-                  <p className="text-xs text-gray-600">October 23, 2024</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                  <h3 className="font-medium text-gray-900 ml-4">Abdul Kalam</h3>
                 </div>
-                <button className="ml-auto p-2 hover:bg-gray-100 rounded-full">⋮</button>
+                <button className="p-2 hover:bg-gray-100 rounded-full text-xl text-gray-900 text-3xl">⋮</button>
+              </div>
+              <div className="mt-1 flex items-center">
+                <div className="flex text-yellow-400">★★★★★</div>
+                <p className="text-xs text-gray-600 ml-2">October 23, 2024</p>
               </div>
               <p className="mt-2 text-gray-700">
                 I was skeptical about winning real money in online games, but Crazy Time changed my mind. Quick and easy withdrawals also
@@ -325,12 +343,11 @@ export default function Home() {
             </div>
 
             <div className="border-t border-gray-200 py-4 pl-12">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-medium text-gray-700">1WIN-Casino</h3>
                   <p className="text-xs text-gray-600">October 23, 2024</p>
                 </div>
-                <button className="ml-auto p-2 hover:bg-gray-100 rounded-full">⋮</button>
               </div>
               <p className="mt-2 text-gray-700">
                 Abdul, we appreciate your kind words! Ensuring a seamless experience for our players, especially with real money transactions, is our top priority. We wish you all the best.
@@ -338,14 +355,16 @@ export default function Home() {
             </div>
 
             <div className="border-t border-gray-200 py-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                <div>
-                  <h3 className="font-medium">Mohamed Rahman</h3>
-                  <div className="flex text-yellow-400">★★★★★</div>
-                  <p className="text-xs text-gray-600">October 22, 2024</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                  <h3 className="font-medium text-gray-900 ml-4">Mohamed Rahman</h3>
                 </div>
-                <button className="ml-auto p-2 hover:bg-gray-100 rounded-full">⋮</button>
+                <button className="p-2 hover:bg-gray-100 rounded-full text-xl text-gray-900 text-3xl">⋮</button>
+              </div>
+              <div className="mt-1 flex items-center">
+                <div className="flex text-yellow-400">★★★★★</div>
+                <p className="text-xs text-gray-600 ml-2">October 22, 2024</p>
               </div>
               <p className="mt-2 text-gray-700">
                 Real money withdrawal after a big win in this game. The withdrawal process was surprisingly fast. Today I won 12,000 rupees here.
@@ -361,12 +380,11 @@ export default function Home() {
             </div>
 
             <div className="border-t border-gray-200 py-4 pl-12">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-medium text-gray-700">1WIN-Casino</h3>
-                  <p className="text-sm text-gray-600">October 22, 2024</p>
+                  <p className="text-xs text-gray-600">October 22, 2024</p>
                 </div>
-                <button className="ml-auto p-2 hover:bg-gray-100 rounded-full">⋮</button>
               </div>
               <p className="mt-2 text-gray-700">
                 Mohammad, thank you for the kind words. We're glad to know that Crazy Time was fun and rewarding for you. Your satisfaction motivates us!
@@ -374,14 +392,16 @@ export default function Home() {
             </div>
 
             <div className="border-t border-gray-200 py-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                <div>
-                  <h3 className="font-medium">Hasan Chowdhury</h3>
-                  <div className="flex text-yellow-400">★★★★</div>
-                  <p className="text-xs text-gray-600">October 22, 2024</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                  <h3 className="font-medium text-gray-900 ml-4">Hasan Chowdhury</h3>
                 </div>
-                <button className="ml-auto p-2 hover:bg-gray-100 rounded-full">⋮</button>
+                <button className="p-2 hover:bg-gray-100 rounded-full text-xl text-gray-900 text-3xl">⋮</button>
+              </div>
+              <div className="mt-1 flex items-center">
+                <div className="flex text-yellow-400">★★★★</div>
+                <p className="text-xs text-gray-600 ml-2">October 22, 2024</p>
               </div>
               <p className="mt-2 text-gray-700">
                 Invested ₹500 and won ₹10,000. Recommended!
@@ -397,14 +417,16 @@ export default function Home() {
             </div>
 
             <div className="border-t border-gray-200 py-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                <div>
-                  <h3 className="font-medium">Iqbal Ahmed</h3>
-                  <div className="flex text-yellow-400">★★★★★</div>
-                  <p className="text-xs text-gray-600">October 21, 2024</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                  <h3 className="font-medium text-gray-900 ml-4">Iqbal Ahmed</h3>
                 </div>
-                <button className="ml-auto p-2 hover:bg-gray-100 rounded-full">⋮</button>
+                <button className="p-2 hover:bg-gray-100 rounded-full text-xl text-gray-900 text-3xl">⋮</button>
+              </div>
+              <div className="mt-1 flex items-center">
+                <div className="flex text-yellow-400">★★★★★</div>
+                <p className="text-xs text-gray-600 ml-2">October 21, 2024</p>
               </div>
               <p className="mt-2 text-gray-700">
                 The thrill of winning real money on Pin Up is unmatched. And the fact that I can withdraw my winnings so quickly is a huge advantage.
@@ -420,12 +442,11 @@ export default function Home() {
             </div>
 
             <div className="border-t border-gray-200 py-4 pl-12">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-medium text-gray-700">1WIN-Casino</h3>
                   <p className="text-xs text-gray-600">October 21, 2024</p>
                 </div>
-                <button className="ml-auto p-2 hover:bg-gray-100 rounded-full">⋮</button>
               </div>
               <p className="mt-2 text-gray-700">
                 Hello Iqbal, I'm glad to know your victory came so quickly. Our team works hard to ensure fast and secure transactions. Thanks for playing Crazy Time
