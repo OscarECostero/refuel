@@ -171,10 +171,26 @@ export default function Home() {
 
         <div className="mt-16 overflow-x-auto">
           <div className="flex space-x-4">
-            <img src="/screenshots/desktop.png" alt="Screenshot 1" className="w-64 h-auto rounded-lg shadow-md" />
-            <img src="/screenshots/home.png" alt="Screenshot 2" className="w-64 h-auto rounded-lg shadow-md" />
-            <img src="/screenshots/mobile.png" alt="Screenshot 3" className="w-64 h-auto rounded-lg shadow-md" />
-            <img src="/screenshots/desktop.png" alt="Screenshot 4" className="w-64 h-auto rounded-lg shadow-md" />
+            <img 
+              src="/screenshots/screenshot2.webp" 
+              alt="Screenshot 2" 
+              className="w-[120px] h-auto rounded-lg shadow-md"
+            />
+            <img 
+              src="/screenshots/screenshot3.webp" 
+              alt="Screenshot 3" 
+              className="w-[120px] h-auto rounded-lg shadow-md"
+            />
+            <img 
+              src="/screenshots/screenshot4.webp" 
+              alt="Screenshot 4" 
+              className="w-[120px] h-auto rounded-lg shadow-md"
+            />
+            <img 
+              src="/screenshots/screenshot1.webp" 
+              alt="Screenshot 1" 
+              className="w-[400px] h-auto rounded-lg shadow-md"
+            />
           </div>
         </div>
 
