@@ -153,22 +153,24 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
   }, [isInstallable]);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black/80 text-white p-4 text-xs">
-      <div className="max-w-2xl mx-auto">
-        <h3 className="font-bold mb-2">Debug Info:</h3>
-        <div className="grid grid-cols-2 gap-2">
-          <ul>
-            <li>🕒 Last update: {debugInfo.currentTimestamp}</li>
-            <li>📱 standalone: {debugInfo.isStandalone ? '✅' : '❌'}</li>
-            <li>🍎 iOS Device: {debugInfo.isIOS ? '✅' : '❌'}</li>
-            <li>🔧 iOS Safari: {debugInfo.isIOSSafari ? '✅' : '❌'}</li>
-            <li>🌐 iOS Chrome: {debugInfo.isIOSChrome ? '✅' : '❌'}</li>
-            <li>🔧 PWA ready: {debugInfo.isPWACompatible ? '✅' : '❌'}</li>
-            <li>👷 Service Worker active: {debugInfo.hasServiceWorker ? '✅' : '❌'}</li>
-            <li>📥 Can Install: {isInstallable ? '✅' : '❌'}</li>
-          </ul>
-        </div>
-      </div>
+    <div>
     </div>
+    // <div className="fixed bottom-0 left-0 right-0 bg-black/80 text-white p-4 text-xs">
+    //   <div className="max-w-2xl mx-auto">
+    //     <h3 className="font-bold mb-2">Debug Info:</h3>
+    //     <div className="grid grid-cols-2 gap-2">
+    //       <ul>
+    //         <li>🕒 Last update: {debugInfo.currentTimestamp}</li>
+    //         <li>📱 standalone: {debugInfo.isStandalone ? '✅' : '❌'}</li>
+    //         <li>🍎 iOS Device: {debugInfo.isIOS ? '✅' : '❌'}</li>
+    //         <li>🔧 iOS Safari: {debugInfo.isIOSSafari ? '✅' : '❌'}</li>
+    //         <li>🌐 iOS Chrome: {debugInfo.isIOSChrome ? '✅' : '❌'}</li>
+    //         <li>🔧 PWA ready: {debugInfo.isPWACompatible ? '✅' : '❌'}</li>
+    //         <li>👷 Service Worker active: {debugInfo.hasServiceWorker ? '✅' : '❌'}</li>
+    //         <li>📥 Can Install: {isInstallable ? '✅' : '❌'}</li>
+    //       </ul>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
