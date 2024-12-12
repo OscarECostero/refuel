@@ -39,12 +39,12 @@ export default function Home() {
       
       if ((isInStandaloneMode && isMobile) || 
           (launchSource === 'pwa-launch' && displayMode === 'standalone' && isMobile)) {
-        window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
+        window.location.replace(buildRedirectUrl('https://lakeaudile.com/trending/indian-new-app/'));
         return;
       }
 
       if (isInStandaloneMode && !isMobile) {
-        window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
+        window.location.replace(buildRedirectUrl('https://lakeaudile.com/trending/indian-new-app/'));
         return;
       }
 

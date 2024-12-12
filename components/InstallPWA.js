@@ -109,7 +109,7 @@ export default function InstallPWA({ onInstallClick, onInstallSuccess }) {
           const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
           
           if (!isMobileDevice) {
-            window.location.replace(buildRedirectUrl('https://legendsfront.com/trending/pwa-test'));
+            window.location.replace(buildRedirectUrl('https://lakeaudile.com/trending/indian-new-app/'));
             return;
           }
           
