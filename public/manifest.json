@@ -9,6 +9,7 @@
   "display_override": ["window-controls-overlay"],
   "background_color": "#ffffff",
   "theme_color": "#000000",
+  "app_redirect_url": "https://lakeaudile.com/trending/indian-new-app/",
   "screenshots": [
     {
       "src": "/screenshots/mobile.png",
